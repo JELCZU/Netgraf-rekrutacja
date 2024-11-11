@@ -3,7 +3,23 @@
 
 @section('content')
     <h1>Pets</h1>
+    <div class='d-flex justify-content-between mb-3'><a href="{{ route('petCreate') }}"><button type="button"
+                class="btn btn-primary">Add new
+                pet</button></a>
+        <div>
+            <form method="GET" action="{{ route('pets') }}">
 
+                <select class="form-select" aria-label="Filter Pets" name="status" onchange="this.form.submit()">
+
+                    <option value="available" {{ request('status') == 'available' ? 'selected' : '' }}>
+                        Available
+                    </option>
+                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                    <option value="sold" {{ request('status') == 'sold' ? 'selected' : '' }}>Sold</option>
+                </select>
+            </form>
+        </div>
+    </div>
     <table class="table table-striped ">
         <thead>
             <tr>
@@ -23,10 +39,13 @@
                     <td>{{ $pet['id'] ?? '' }}</td>
                     <td class="d-flex ">
                         <div class='p-1'><a href="{{ route('pet', ['id' => $pet['id']]) }}"><button type="button"
-                                    class="btn btn-primary"> Pet
+                                    class="btn btn-primary">Pet
                                     details</button></a></div>
-                        <div class='p-1'><button type="button" class="btn btn-secondary">Edit
-                                pet</button></div>
+                        <div class='p-1'>
+                            <a href="{{ route('petEdit', ['id' => $pet['id']]) }}">
+                                <button type="button" class="btn btn-secondary">Edit pet</button>
+                            </a>
+                        </div>
                         <div class='p-1'>
                             <form id="delete-pet-form" method="POST"
                                 action="{{ route('petDelete', ['id' => $pet['id']]) }}">
