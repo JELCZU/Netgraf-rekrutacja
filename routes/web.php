@@ -10,6 +10,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [PetController::class, 'showHome'])->name('home');
 Route::get('/pets', [PetController::class, 'showPets'])->name('pets');
 Route::get('/pet',[  PetController::class, 'showPet'])->name('pet');
-Route::get('/app', function () {
-    return view('app');
-});
+Route::delete('/pets/{id}', [PetController::class, 'deletePet'])->name('petDelete');
+

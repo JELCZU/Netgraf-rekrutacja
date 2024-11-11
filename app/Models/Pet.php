@@ -9,13 +9,13 @@ class Pet extends Model
 {
     protected $apiUrl="https://petstore.swagger.io/v2";
 
-    // public function __construct(array $attributes = [])
-    // {
-    //     parent::__construct($attributes);
-    //     $this->apiUrl = config('services.external_api_url', env('EXTERNAL_API_URL'));
-    // }
+    protected $customHttp;
 
-    // Post a pet image
+    public function __construct(array $attributes = [])
+    {
+      
+        $this->customHttp = Http::withOptions(['verify' => false]);
+    }
     public function postPetImage($petId, $imagePath)
     {
         $response = Http::attach(
@@ -28,7 +28,7 @@ class Pet extends Model
     // Create a new pet
     public function postPet($data)
     {
-        $response = Http::post("{$this->apiUrl}/pets", $data);
+        $response = $this->customHttp->post("{$this->apiUrl}/pets", $data);
 
         return $response->json();
     }
@@ -36,7 +36,7 @@ class Pet extends Model
     // Update an existing pet
     public function putPet($id, $data)
     {
-        $response = Http::put("{$this->apiUrl}/pets/{$id}", $data);
+        $response = $this->customHttp->put("{$this->apiUrl}/pets/{$id}", $data);
 
         return $response->json();
     }
@@ -44,7 +44,7 @@ class Pet extends Model
     // Get pets by status
     public function getPetsByStatus($status = "available")
     {
-        $response = Http::withOptions(['verify' => false])->get("{$this->apiUrl}/pet/findByStatus", [
+        $response = $this->customHttp->get("{$this->apiUrl}/pet/findByStatus", [
             'status' => $status
         ]);
 
@@ -54,7 +54,7 @@ class Pet extends Model
     // Get a pet by ID
     public function getPetById($id)
     {
-        $response = Http::get("{$this->apiUrl}/pets/{$id}");
+        $response = $this->customHttp->get("{$this->apiUrl}/pet/{$id}");
 
         return $response->json();
     }
@@ -62,7 +62,7 @@ class Pet extends Model
     // Update pet information by ID
     public function putPetById($id, $data)
     {
-        $response = Http::put("{$this->apiUrl}/pets/{$id}", $data);
+        $response = $this->$customHttp->put("{$this->apiUrl}/pets/{$id}", $data);
 
         return $response->json();
     }
@@ -70,7 +70,7 @@ class Pet extends Model
     // Delete a pet by ID
     public function deletePet($id)
     {
-        $response = Http::delete("{$this->apiUrl}/pets/{$id}");
+        $response = $this->customHttp->delete("{$this->apiUrl}/pet/{$id}");
 
         return $response->json();
     }
